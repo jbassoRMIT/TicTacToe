@@ -72,6 +72,23 @@ while(!isWinner){
         winner="player1";
         break;
     }
+
+    //Ckeck if board full and declare draw as p1 did not win
+    let countEmpty=0;
+    for(let i=0;i<3;i++){
+        for(let j=0;j<3;j++){
+            if(gameboard.game[i][j]=="_"){
+                countEmpty+=1;
+            }
+        }
+    }
+
+    if(countEmpty==0){
+        isWinner=true;
+        winner="Draw";
+        break;
+    }
+
     alert(countX);
     alert(`${gameboard.game[0][0]}|${gameboard.game[0][1]}|${gameboard.game[0][2]}\n${gameboard.game[1][0]}|${gameboard.game[1][1]}|${gameboard.game[1][2]}\n${gameboard.game[2][0]}|${gameboard.game[2][1]}|${gameboard.game[2][2]}`);
 
@@ -134,6 +151,22 @@ while(!isWinner){
         winner="player2"
     }
 
+    //Ckeck if board full and declare draw as p2 did not win
+    countEmpty=0;
+    for(let i=0;i<3;i++){
+        for(let j=0;j<3;j++){
+            if(gameboard.game[i][j]=="_"){
+                countEmpty+=1;
+            }
+        }
+    }
+
+    if(countEmpty==0){
+        isWinner=true;
+        winner="Draw";
+        break;
+    }
+
 
     console.log(gameboard.game);
     alert(`${gameboard.game[0][0]}|${gameboard.game[0][1]}|${gameboard.game[0][2]}\n${gameboard.game[1][0]}|${gameboard.game[1][1]}|${gameboard.game[1][2]}\n${gameboard.game[2][0]}|${gameboard.game[2][1]}|${gameboard.game[2][2]}`);
@@ -141,5 +174,11 @@ while(!isWinner){
 
 }
 
-console.log(`Well done ${winner} you won`);
+if(winner!="Draw"){
+    console.log(`Well done ${winner} you won`);
+}
+else{
+    console.log(`Draw, no one wins!`);
+}
+
 
