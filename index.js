@@ -1,9 +1,9 @@
 //define gameboard as object
 const gameboard={
     game:[
-        ["","",""],
-        ["","",""],
-        ["","",""]
+        ["_","_","_"],
+        ["_","_","_"],
+        ["_","_","_"]
     ]
 }
 
@@ -36,7 +36,7 @@ while(!isWinner){
 
     //check column
     countX=0
-    for (let i=0;i<2;i++){
+    for (let i=0;i<3;i++){
         if(gameboard.game[i][p1y]=="X"){
             countX+=1;
         }
@@ -61,11 +61,69 @@ while(!isWinner){
         )
     ){
         isWinner=true;
-        winner="player1"
+        winner="player1";
+        break;
+    }
+    alert(countX);
+    alert(`${gameboard.game[0][0]}|${gameboard.game[0][1]}|${gameboard.game[0][2]}\n${gameboard.game[1][0]}|${gameboard.game[1][1]}|${gameboard.game[1][2]}\n${gameboard.game[2][0]}|${gameboard.game[2][1]}|${gameboard.game[2][2]}`);
+
+    //Now get player 2 input, at the moment they are naughts
+    const p2x=prompt("Player 2 choose a row num");
+    const p2y=prompt("Player 2 choose a column num");
+
+    //place square in gameboard.game
+    gameboard.game[p2x][p2y]="O";
+
+    //check if p2 wins?
+    //check row
+    let countY=0
+    for(let cell of gameboard.game[p2x]){
+        if(cell=="O"){
+            countY+=1;
+        }
+    }
+    if(countY==3){
+        isWinner=true;
+        winner="player2";
+        break;
     }
 
+    //check column
+    countY=0
+    for (let i=0;i<3;i++){
+        if(gameboard.game[i][p2y]=="O"){
+            countY+=1;
+        }
+    }
+    if(countY==3){
+        isWinner=true;
+        winner="player1";
+        break;
+    }
+
+    //check diag
+    if(
+        (
+            gameboard.game[0][0]=="Y" &&
+            gameboard.game[1][1]=="Y" &&
+            gameboard.game[2][2]=="Y"
+        ) ||
+        (
+            gameboard.game[0][2]=="Y" &&
+            gameboard.game[1][1]=="Y" &&
+            gameboard.game[2][2]=="Y"
+        )
+    ){
+        isWinner=true;
+        winner="player2"
+    }
+
+
     console.log(gameboard.game);
+    alert(`${gameboard.game[0][0]}|${gameboard.game[0][1]}|${gameboard.game[0][2]}\n${gameboard.game[1][0]}|${gameboard.game[1][1]}|${gameboard.game[1][2]}\n${gameboard.game[2][0]}|${gameboard.game[2][1]}|${gameboard.game[2][2]}`);
+    alert(countY);
+
 }
 
-console.log("Well done player 1 you won");
+console.log(`Well done ${winner} you won`);
 
