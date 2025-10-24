@@ -14,11 +14,19 @@ let winner="";
 //play game and ask for prompts until isWinner
 while(!isWinner){
     //get player 1 input, at the moment they are X
-    const p1x=prompt("Player 1 choose a row num");
-    const p1y=prompt("Player 1 choose a column num");
+    let p1x=prompt("Player 1 choose a row num");
+    let p1y=prompt("Player 1 choose a column num");
+    
+    //check for empty square with while loop, while getting player input
+    while(gameboard.game[p1x][p1y]=="X" || gameboard.game[p1x][p1y]=="O"){
+        //request again for valid input as this square is full
+        p1x=prompt("Sorry that square has been filled, choose a valid row num");
+        p1y=prompt("Sorry that square has been filled, choose a valid coumn num");
+    }
 
     //place square in gameboard.game
     gameboard.game[p1x][p1y]="X";
+    
 
     //check if p1 wins?
     //check row
@@ -68,11 +76,19 @@ while(!isWinner){
     alert(`${gameboard.game[0][0]}|${gameboard.game[0][1]}|${gameboard.game[0][2]}\n${gameboard.game[1][0]}|${gameboard.game[1][1]}|${gameboard.game[1][2]}\n${gameboard.game[2][0]}|${gameboard.game[2][1]}|${gameboard.game[2][2]}`);
 
     //Now get player 2 input, at the moment they are naughts
-    const p2x=prompt("Player 2 choose a row num");
-    const p2y=prompt("Player 2 choose a column num");
+    let p2x=prompt("Player 2 choose a row num");
+    let p2y=prompt("Player 2 choose a column num");
+
+    //check for empty square with while loop, while getting player input
+    while(gameboard.game[p2x][p2y]=="X" || gameboard.game[p2x][p2y]=="O"){
+        //request again for valid input as this square is full
+        p2x=prompt("Sorry that square has been filled, choose a valid row num");
+        p2y=prompt("Sorry that square has been filled, choose a valid column num");
+    }
 
     //place square in gameboard.game
     gameboard.game[p2x][p2y]="O";
+
 
     //check if p2 wins?
     //check row
