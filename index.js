@@ -7,26 +7,128 @@ const gameboard={
     ]
 }
 
-//iterate over gameboard, adding a div to the gameboard div
-const gameboardDiv=document.querySelector(".gameboard");
-for(let i=0;i<3;i++){
-    //create a row and append to gameboardDiv
-    const boardRow=document.createElement("div");
-    gameboardDiv.appendChild(boardRow);
-    boardRow.className="boardRow";
-
-    //in each row create 3 squares
-    for(let j=0;j<3;j++){
-        //create square
-        const square=document.createElement("div");
-        square.textContent=gameboard.game[i][j];
-
-        //target gameboard div and append square
-        
-        boardRow.appendChild(square);
-        
+//Write function that removes children from parent node
+const removeChildren=function(parent){
+    while (parent.firstElementChild){
+        parent.removeChild(parent.firstElementChild);
     }
 }
+
+//Write function that displays gameboard
+const displayBoard=function(){
+    //iterate over gameboard, adding a div to the gameboard div
+    const gameboardDiv=document.querySelector(".gameboard");
+
+    //Clear contents of gameboard
+    removeChildren(gameboardDiv);
+
+    for(let i=0;i<3;i++){
+        //create a row and append to gameboardDiv
+        const boardRow=document.createElement("div");
+        gameboardDiv.appendChild(boardRow);
+        boardRow.className="boardRow";
+
+        //in each row create 3 squares
+        for(let j=0;j<3;j++){
+            //create square
+            const square=document.createElement("div");
+            square.textContent=gameboard.game[i][j];
+
+            //target gameboard div and append square
+            
+            boardRow.appendChild(square);
+            
+        }
+    }
+}
+
+//Call initial render of board
+displayBoard();
+
+//Initialise P1 as starting player, X
+let player1=true;
+
+
+//Add buttons in to allow player to place naught or cross in gameboard
+const inputButtons=document.querySelector(".inputButtons");
+const inputForm=document.createElement("form");
+const formHeading=document.createElement("h1");
+if(player1){
+    formHeading.textContent="Player 1 - X"
+}
+else{
+    formHeading.textContent="Player 2 - O"
+}
+const submit=document.createElement("button");
+submit.type="submit";
+submit.textContent="Submit";
+
+const rowLabel=document.createElement("label");
+rowLabel.textContent="Please enter a row number: ";
+rowLabel.setAttribute("for","row");
+const rowInput=document.createElement("input");
+rowInput.type="number";
+rowInput.name="row"
+rowInput.id="row";
+rowInput.min=0;
+rowInput.max=2;
+
+const colLabel=document.createElement("label");
+colLabel.textContent="Please enter a column number: ";
+colLabel.setAttribute("for","col");
+const colInput=document.createElement("input");
+colInput.type="number";
+colInput.name="col";
+colInput.id="col"
+colInput.min=0;
+colInput.max=2;
+
+inputButtons.appendChild(inputForm);
+inputForm.appendChild(formHeading);
+inputForm.appendChild(rowLabel);
+inputForm.appendChild(rowInput);
+inputForm.appendChild(document.createElement("br"));
+inputForm.appendChild(colLabel);
+inputForm.appendChild(colInput);
+inputForm.appendChild(document.createElement("br"));
+inputForm.appendChild(submit);
+
+//add event listener to the form
+inputForm.addEventListener("submit",(e)=>{
+    e.preventDefault();
+
+    // extract coordinates from input
+    const rowNum=document.querySelector("#row").value;
+    const colNum=document.querySelector("#col").value;
+
+    //update gameboard.game with an X or O depending on player status
+    if(player1){
+        gameboard.game[rowNum][colNum]="X";
+    }
+    else{
+        gameboard.game[rowNum][colNum]="O";
+    }
+    
+
+    console.log(`Chosen row is: ${rowNum}`);
+    console.log(`Chosen column is: ${colNum}`);
+    console.log(gameboard.game);
+
+    //call displayBoard() function
+    displayBoard();
+
+    //swap players
+    player1=!player1;
+
+    if(player1){
+        formHeading.textContent="Player 1 - X"
+    }
+    else{
+        formHeading.textContent="Player 2 - O"
+    }
+    
+})
+
 
 //Setup boolean to determine if game has been won
 let isWinner=false;
