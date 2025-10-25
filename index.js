@@ -42,6 +42,15 @@ const displayBoard=function(){
     }
 }
 
+//Write a function that resets the board
+const resetBoard=function(){
+    gameboard.game=[
+        ["_","_","_"],
+        ["_","_","_"],
+        ["_","_","_"]
+    ]
+}
+
 //Call initial render of board
 displayBoard();
 
@@ -54,7 +63,7 @@ const inputButtons=document.querySelector(".inputButtons");
 const inputForm=document.createElement("form");
 const formHeading=document.createElement("h1");
 if(player1){
-    formHeading.textContent="Player 1 - X"
+    formHeading.textContent="Player 1 - X";
 }
 else{
     formHeading.textContent="Player 2 - O"
@@ -97,42 +106,169 @@ inputForm.appendChild(submit);
 inputForm.addEventListener("submit",(e)=>{
     e.preventDefault();
 
-    // extract coordinates from input
-    const rowNum=document.querySelector("#row").value;
-    const colNum=document.querySelector("#col").value;
+    //implement game logic here to check if there's a winner
+    let isWinner=false;
+    let winner="";
 
-    //update gameboard.game with an X or O depending on player status
-    if(player1){
-        gameboard.game[rowNum][colNum]="X";
+    if(!isWinner){
+        // extract coordinates from input
+        const rowNum=document.querySelector("#row").value;
+        const colNum=document.querySelector("#col").value;
+
+        //update gameboard.game with an X or O depending on player status
+        if(player1){
+            gameboard.game[rowNum][colNum]="X";
+            //reset the value of inputs
+            document.querySelector("#row").value=0;
+            document.querySelector("#col").value=0;
+        }
+        else{
+            gameboard.game[rowNum][colNum]="O";
+            //reset the value of inputs
+            document.querySelector("#row").value=0;
+            document.querySelector("#col").value=0;
+        }
+
+        // check if p1 wins?
+        //check row
+        let countX=0
+        for(let cell of gameboard.game[rowNum]){
+            if(cell=="X"){
+                countX+=1;
+            }
+        }
+        if(countX==3){
+            isWinner=true;
+            winner="player1";
+        }
+
+        //check column
+        countX=0
+        for (let i=0;i<3;i++){
+            if(gameboard.game[i][colNum]=="X"){
+                countX+=1;
+            }
+        }
+        if(countX==3){
+            isWinner=true;
+            winner="player1";
+        }
+
+        //check diag
+        if(
+            (
+                gameboard.game[0][0]=="X" &&
+                gameboard.game[1][1]=="X" &&
+                gameboard.game[2][2]=="X"
+            ) ||
+            (
+                gameboard.game[0][2]=="X" &&
+                gameboard.game[1][1]=="X" &&
+                gameboard.game[2][2]=="X"
+            )
+        ){
+            isWinner=true;
+            winner="player1";
+        }
+
+        // check if p2 wins?
+        //check row
+        let countY=0
+        for(let cell of gameboard.game[rowNum]){
+            if(cell=="O"){
+                countY+=1;
+            }
+        }
+        if(countY==3){
+            isWinner=true;
+            winner="player2";
+        }
+
+        //check column
+        countY=0
+        for (let i=0;i<3;i++){
+            if(gameboard.game[i][colNum]=="O"){
+                countY+=1;
+            }
+        }
+        if(countY==3){
+            isWinner=true;
+            winner="player1";
+        }
+
+        //check diag
+        if(
+            (
+                gameboard.game[0][0]=="O" &&
+                gameboard.game[1][1]=="O" &&
+                gameboard.game[2][2]=="O"
+            ) ||
+            (
+                gameboard.game[0][2]=="O" &&
+                gameboard.game[1][1]=="O" &&
+                gameboard.game[2][2]=="O"
+            )
+        ){
+            isWinner=true;
+            winner="player2"
+        }
+
+        console.log(`Chosen row is: ${rowNum}`);
+        console.log(`Chosen column is: ${colNum}`);
+        console.log(gameboard.game);
+
+        //call displayBoard() function
+        displayBoard();
+
+        //swap players
+        player1=!player1;
+
+        if(player1){
+            formHeading.textContent="Player 1 - X"
+        }
+        else{
+            formHeading.textContent="Player 2 - O"
+        }
     }
-    else{
-        gameboard.game[rowNum][colNum]="O";
+    if(isWinner){
+        //Run this block if a winner has been found, add some text to winner div declaring winner or draw
+        const winnerDiv=document.querySelector(".winner");
+        const winnerText=document.createElement("h2");
+        winnerText.textContent=`Congratulations, ${winner} won`;
+        winnerDiv.appendChild(winnerText);
+
+        //remove formHeading text as there are no further moves to make
+        formHeading.textContent="Game over";
+
+
+        //add a button in to reset
+        const resetButton=document.createElement("button");
+        resetButton.textContent="reset";
+        winnerDiv.appendChild(resetButton);
+
+        resetButton.addEventListener("click",()=>{
+            resetBoard();
+            displayBoard();
+            player1=true;
+
+            //reset the header text to indicate player 1's turn
+            formHeading.textContent="Player 1 - X";
+
+            removeChildren(winnerDiv);
+
+            //reset the value of inputs
+            document.querySelector("#row").value=0;
+            document.querySelector("#col").value=0;
+
+        })
+        
     }
-    
-
-    console.log(`Chosen row is: ${rowNum}`);
-    console.log(`Chosen column is: ${colNum}`);
-    console.log(gameboard.game);
-
-    //call displayBoard() function
-    displayBoard();
-
-    //swap players
-    player1=!player1;
-
-    if(player1){
-        formHeading.textContent="Player 1 - X"
-    }
-    else{
-        formHeading.textContent="Player 2 - O"
-    }
-    
 })
 
 
 //Setup boolean to determine if game has been won
-let isWinner=false;
-let winner="";
+// let isWinner=false;
+// let winner="";
 
 // //play game and ask for prompts until isWinner
 // while(!isWinner){
