@@ -34,8 +34,17 @@ const displayBoard=function(){
             const square=document.createElement("div");
             square.textContent=gameboard.game[i][j];
 
+            //add a clas naughts or crosses depending on if it contains X or O
+            if(square.textContent=="X"){
+                square.classList.add("crosses");
+                square.classList.remove("naughts");
+            }
+            else if(square.textContent=="O"){
+                square.classList.add("naughts");
+                square.classList.remove("crosses");
+            }
+
             //target gameboard div and append square
-            
             boardRow.appendChild(square);
             
         }
@@ -64,9 +73,13 @@ const inputForm=document.createElement("form");
 const formHeading=document.createElement("h1");
 if(player1){
     formHeading.textContent="Player 1 - X";
+    formHeading.classList.add("crosses");
+    formHeading.classList.remove("naughts");
 }
 else{
-    formHeading.textContent="Player 2 - O"
+    formHeading.textContent="Player 2 - O";
+    formHeading.classList.add("naughts");
+    formHeading.classList.remove("crosses");
 }
 const submit=document.createElement("button");
 submit.type="submit";
@@ -79,8 +92,8 @@ const rowInput=document.createElement("input");
 rowInput.type="number";
 rowInput.name="row"
 rowInput.id="row";
-rowInput.min=0;
-rowInput.max=2;
+rowInput.min=1;
+rowInput.max=3;
 
 const colLabel=document.createElement("label");
 colLabel.textContent="Please enter a column number: ";
@@ -89,8 +102,8 @@ const colInput=document.createElement("input");
 colInput.type="number";
 colInput.name="col";
 colInput.id="col"
-colInput.min=0;
-colInput.max=2;
+colInput.min=1;
+colInput.max=3;
 
 inputButtons.appendChild(inputForm);
 inputForm.appendChild(formHeading);
@@ -112,8 +125,8 @@ inputForm.addEventListener("submit",(e)=>{
 
     if(!isWinner){
         // extract coordinates from input
-        const rowNum=document.querySelector("#row").value;
-        const colNum=document.querySelector("#col").value;
+        const rowNum=(document.querySelector("#row").value)-1;
+        const colNum=(document.querySelector("#col").value)-1;
 
         //update gameboard.game with an X or O depending on player status
         //also check here if square is empty. Only allow player to place marker if empty
@@ -122,8 +135,8 @@ inputForm.addEventListener("submit",(e)=>{
             if(gameboard.game[rowNum][colNum]=="_"){
                 gameboard.game[rowNum][colNum]="X";
                 //reset the value of inputs
-                document.querySelector("#row").value=0;
-                document.querySelector("#col").value=0;
+                document.querySelector("#row").value="";
+                document.querySelector("#col").value="";
 
                 //swap players only if move made successfully
                 player1=!player1;
@@ -141,8 +154,8 @@ inputForm.addEventListener("submit",(e)=>{
             if(gameboard.game[rowNum][colNum]=="_"){
                 gameboard.game[rowNum][colNum]="O";
                 //reset the value of inputs
-                document.querySelector("#row").value=0;
-                document.querySelector("#col").value=0;
+                document.querySelector("#row").value="";
+                document.querySelector("#col").value="";
 
                 //swap players only if move made successfully
                 player1=!player1;
@@ -240,6 +253,22 @@ inputForm.addEventListener("submit",(e)=>{
             winner="player2"
         }
 
+        //check for draw
+        let countEmpty=0;
+        for(let i=0;i<3;i++){
+            for(let j=0;j<3;j++){
+                if(gameboard.game[i][j]=="_"){
+                    countEmpty+=1;
+                }
+            }
+        }
+
+        if(countEmpty==0){
+            isWinner=true;
+            winner="Draw";
+        }
+
+
         console.log(`Chosen row is: ${rowNum}`);
         console.log(`Chosen column is: ${colNum}`);
         console.log(gameboard.game);
@@ -250,17 +279,27 @@ inputForm.addEventListener("submit",(e)=>{
         
 
         if(player1){
-            formHeading.textContent="Player 1 - X"
+            formHeading.textContent="Player 1 - X";
+            formHeading.classList.add("crosses");
+            formHeading.classList.remove("naughts");
         }
         else{
-            formHeading.textContent="Player 2 - O"
+            formHeading.textContent="Player 2 - O";
+            formHeading.classList.add("naughts");
+            formHeading.classList.remove("crosses");
         }
     }
     if(isWinner){
         //Run this block if a winner has been found, add some text to winner div declaring winner or draw
         const winnerDiv=document.querySelector(".winner");
         const winnerText=document.createElement("h2");
-        winnerText.textContent=`Congratulations, ${winner} won`;
+        if(winner="Draw"){
+            winnerText.textContent=`Draw!`;
+        }
+        else{
+            winnerText.textContent=`Congratulations, ${winner} won`;
+        }
+        
         winnerDiv.appendChild(winnerText);
 
         //remove formHeading text as there are no further moves to make
@@ -283,8 +322,8 @@ inputForm.addEventListener("submit",(e)=>{
             removeChildren(winnerDiv);
 
             //reset the value of inputs
-            document.querySelector("#row").value=0;
-            document.querySelector("#col").value=0;
+            document.querySelector("#row").value="";
+            document.querySelector("#col").value="";
 
         })
         

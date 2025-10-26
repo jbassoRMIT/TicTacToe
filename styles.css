@@ -20,3 +20,21 @@ h1{
     align-items: center;
     justify-content: center;
 }
+
+div.crosses{
+    color: red;
+    background-color: rgb(245, 134, 134);
+}
+
+div.naughts{
+    color: green;
+    background-color: rgb(141, 218, 141);
+}
+
+h1.crosses{
+    color: red;
+}
+
+h1.naughts{
+    color: green;
+}
