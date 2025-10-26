@@ -7,6 +7,9 @@ const gameboard={
     ]
 }
 
+let p1Wins=0;
+let p2Wins=0;
+
 //Write function that removes children from parent node
 const removeChildren=function(parent){
     while (parent.firstElementChild){
@@ -58,6 +61,9 @@ const resetBoard=function(){
         ["_","_","_"],
         ["_","_","_"]
     ]
+
+    player1=true;
+    isWinner=false;
 }
 
 //Call initial render of board
@@ -180,6 +186,7 @@ inputForm.addEventListener("submit",(e)=>{
         if(countX==3){
             isWinner=true;
             winner="player1";
+            p1Wins+=1;
         }
 
         //check column
@@ -192,6 +199,7 @@ inputForm.addEventListener("submit",(e)=>{
         if(countX==3){
             isWinner=true;
             winner="player1";
+            p1Wins+=1;
         }
 
         //check diag
@@ -209,6 +217,7 @@ inputForm.addEventListener("submit",(e)=>{
         ){
             isWinner=true;
             winner="player1";
+            p1Wins+=1;
         }
 
         // check if p2 wins?
@@ -222,6 +231,7 @@ inputForm.addEventListener("submit",(e)=>{
         if(countY==3){
             isWinner=true;
             winner="player2";
+            p2Wins+=1;
         }
 
         //check column
@@ -233,7 +243,8 @@ inputForm.addEventListener("submit",(e)=>{
         }
         if(countY==3){
             isWinner=true;
-            winner="player1";
+            winner="player2";
+            p2Wins+=1;
         }
 
         //check diag
@@ -250,7 +261,8 @@ inputForm.addEventListener("submit",(e)=>{
             )
         ){
             isWinner=true;
-            winner="player2"
+            winner="player2";
+            p2Wins+=1;
         }
 
         //check for draw
@@ -272,6 +284,8 @@ inputForm.addEventListener("submit",(e)=>{
         console.log(`Chosen row is: ${rowNum}`);
         console.log(`Chosen column is: ${colNum}`);
         console.log(gameboard.game);
+        console.log(countEmpty);
+        console.log(winner);
 
         //call displayBoard() function
         displayBoard();
@@ -293,7 +307,7 @@ inputForm.addEventListener("submit",(e)=>{
         //Run this block if a winner has been found, add some text to winner div declaring winner or draw
         const winnerDiv=document.querySelector(".winner");
         const winnerText=document.createElement("h2");
-        if(winner="Draw"){
+        if(winner=="Draw"){
             winnerText.textContent=`Draw!`;
         }
         else{
@@ -304,6 +318,8 @@ inputForm.addEventListener("submit",(e)=>{
 
         //remove formHeading text as there are no further moves to make
         formHeading.textContent="Game over";
+        formHeading.classList.remove("naughts");
+        formHeading.classList.remove("crosses");
 
 
         //add a button in to reset
@@ -320,13 +336,22 @@ inputForm.addEventListener("submit",(e)=>{
             formHeading.textContent="Player 1 - X";
 
             removeChildren(winnerDiv);
+            removeChildren(winTally);
 
             //reset the value of inputs
             document.querySelector("#row").value="";
             document.querySelector("#col").value="";
 
         })
-        
+
+        //Display current tally
+        const winTally=document.querySelector(".winTally");
+        const p1Tally=document.createElement("p");
+        const p2Tally=document.createElement("p");
+        p1Tally.textContent=`Player 1 wins: ${p1Wins}`;
+        p2Tally.textContent=`Player 1 wins: ${p2Wins}`;
+        winTally.appendChild(p1Tally);
+        winTally.appendChild(p2Tally);
     }
 })
 

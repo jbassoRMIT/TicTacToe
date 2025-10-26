@@ -38,3 +38,7 @@ h1.crosses{
 h1.naughts{
     color: green;
 }
+
+form h1{
+    color: blue;
+}
