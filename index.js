@@ -116,17 +116,44 @@ inputForm.addEventListener("submit",(e)=>{
         const colNum=document.querySelector("#col").value;
 
         //update gameboard.game with an X or O depending on player status
+        //also check here if square is empty. Only allow player to place marker if empty
+        let errorMessage=document.querySelector(".errorMessage");
         if(player1){
-            gameboard.game[rowNum][colNum]="X";
-            //reset the value of inputs
-            document.querySelector("#row").value=0;
-            document.querySelector("#col").value=0;
+            if(gameboard.game[rowNum][colNum]=="_"){
+                gameboard.game[rowNum][colNum]="X";
+                //reset the value of inputs
+                document.querySelector("#row").value=0;
+                document.querySelector("#col").value=0;
+
+                //swap players only if move made successfully
+                player1=!player1;
+
+                //remove error message upon successul placement
+                errorMessage.textContent="";
+            }
+            else{
+                //generate message indicating to place on empty square
+                errorMessage.textContent="Please choose an empty square";
+            }
+            
         }
         else{
-            gameboard.game[rowNum][colNum]="O";
-            //reset the value of inputs
-            document.querySelector("#row").value=0;
-            document.querySelector("#col").value=0;
+            if(gameboard.game[rowNum][colNum]=="_"){
+                gameboard.game[rowNum][colNum]="O";
+                //reset the value of inputs
+                document.querySelector("#row").value=0;
+                document.querySelector("#col").value=0;
+
+                //swap players only if move made successfully
+                player1=!player1;
+
+                //remove error message upon successul placement
+                errorMessage.textContent="";
+            }
+            else{
+                //generate message indicating to place on empty square
+                errorMessage.textContent="Please choose an empty square";
+            }
         }
 
         // check if p1 wins?
@@ -220,8 +247,7 @@ inputForm.addEventListener("submit",(e)=>{
         //call displayBoard() function
         displayBoard();
 
-        //swap players
-        player1=!player1;
+        
 
         if(player1){
             formHeading.textContent="Player 1 - X"
